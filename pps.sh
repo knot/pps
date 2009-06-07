@@ -20,6 +20,33 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
+function print_help() {
+cat << EOF
+Usage: pps.sh [OPTIONS]
+In a directory with a specfile and tarball with sources, prepare the sources
+for future work. This may involve running 'quilt setup', pushing the patches,
+generating ctags and/or cscope databases, etc.
+
+OPTIONS:
+	-h 				print this help
+
+Report bugs to <petr.uzel@centrum.cz>
+EOF
+}
+
+# process arguments
+while getopts ":h" option
+do
+	case $option in
+		h) print_help;
+		   exit 0;;
+		*) echo "pps.sh: invalid option -- 'TODO'";
+		   echo "Try 'pps.sh -h' for more information";
+		   exit 1;
+   esac
+done
+
+
 
 # check specfile
 spec_file_count=$(ls -1 *.spec 2>/dev/null | wc -l)
@@ -32,7 +59,6 @@ fi;
 specfile=*.spec
 
 # check for existence of needed utilities
-
 # check if quilt is installed
 if ! which quilt > /dev/null ; then
 	echo "Error: quilt is not installed";
@@ -76,7 +102,7 @@ if [ $top_dirs_count -gt 1 ]; then
 fi;
 src_directory=$(tar tf $archives | cut -d '/' -f 1 | sort -u)
 
-# cwd to uncompressed tarball
+# cd to uncompressed tarball
 cd $src_directory
 
 # quilt push -a
@@ -90,9 +116,11 @@ ctags -R --exclude=.pc .
 #TODO: set options for osc build (perhaps something like user-defined postscript ?)
 
 
-#TODO accept -h/--help
-#TODO accept -f/--force
-#TODO accept -v/--verbose
+#TODO accept -h (help)
+#TODO accept -f (force)
+#TODO accept -v (verbose)
 #TODO delete temporary files (with traps?)
-#TODO accept --no-color
-#TODO accept -q/--quiet
+#TODO accept -n (no color)
+#TODO accept -q (quiet)
+#TODO rename pps.sh -> pps
+#TODO describe default actions taken when no arguments are given
