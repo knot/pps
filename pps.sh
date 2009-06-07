@@ -40,7 +40,7 @@ do
 	case $option in
 		h) print_help;
 		   exit 0;;
-		*) echo "pps.sh: invalid option -- 'TODO'";
+		*) echo "pps.sh: invalid option -$OPTARG";
 		   echo "Try 'pps.sh -h' for more information";
 		   exit 1;
    esac
