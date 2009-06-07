@@ -116,7 +116,6 @@ ctags -R --exclude=.pc .
 #TODO: set options for osc build (perhaps something like user-defined postscript ?)
 
 
-#TODO accept -h (help)
 #TODO accept -f (force)
 #TODO accept -v (verbose)
 #TODO delete temporary files (with traps?)
