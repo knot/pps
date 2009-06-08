@@ -28,25 +28,32 @@ for future work. This may involve running 'quilt setup', pushing the patches,
 generating ctags and/or cscope databases, etc.
 
 OPTIONS:
-	-h 				print this help
+	-h      print this help
+	-q      be less verbose
 
 Report bugs to <petr.uzel@centrum.cz>
 EOF
 }
 
+# default options
+arg_quiet=false
+
 # process arguments
-while getopts ":h" option
+while getopts ":hq" option
 do
 	case $option in
 		h) print_help;
 		   exit 0;;
+		q) arg_quiet=true;;
 		*) echo "pps.sh: invalid option -$OPTARG";
 		   echo "Try 'pps.sh -h' for more information";
-		   exit 1;
+		   exit 1;;
    esac
 done
 
-
+if $arg_quiet; then
+	quilt_quiet="-q";
+fi;
 
 # check specfile
 spec_file_count=$(ls -1 *.spec 2>/dev/null | wc -l)
@@ -105,8 +112,8 @@ src_directory=$(tar tf $archives | cut -d '/' -f 1 | sort -u)
 # cd to uncompressed tarball
 cd $src_directory
 
-# quilt push -a
-quilt push -a
+# quilt: push patches
+quilt push -a $quilt_quiet
 
 # make ctags database
 ctags -R --exclude=.pc .
@@ -115,11 +122,8 @@ ctags -R --exclude=.pc .
 
 #TODO: set options for osc build (perhaps something like user-defined postscript ?)
 
-
 #TODO accept -f (force)
 #TODO accept -v (verbose)
 #TODO delete temporary files (with traps?)
 #TODO accept -n (no color)
-#TODO accept -q (quiet)
-#TODO rename pps.sh -> pps
 #TODO describe default actions taken when no arguments are given
