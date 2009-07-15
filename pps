@@ -58,7 +58,11 @@ fi;
 # check specfile
 spec_file_count=$(ls -1 *.spec 2>/dev/null | wc -l)
 
-if [ $spec_file_count -ne 1 ]; then
+if [ $spec_file_count -gt 1 ]; then
+	#TODO: if there is a specfile whose name mathes parent directory, use that one and issue a warning
+	echo "Error: more that one specfiles exist";
+	exit 1;
+elif [ $spec_file_count -lt 1 ]; then
 	echo "Error: no specfile found";
 	exit 1;
 fi;
